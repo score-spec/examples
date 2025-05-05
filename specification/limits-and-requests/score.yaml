@@ -1,0 +1,13 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: my-workload
+containers:
+  my-container:
+    image: .
+    resources:
+      limits:
+        cpu: "0.250"
+        memory: "256Mi"
+      requests:
+        cpu: "0.025"
+        memory: "64Mi"

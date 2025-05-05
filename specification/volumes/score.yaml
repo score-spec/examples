@@ -1,0 +1,12 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: my-workload
+containers:
+  my-container:
+    image: .
+    volumes:
+      - target: /data
+        source: ${resources.data}
+resources:
+  data:
+    type: volume

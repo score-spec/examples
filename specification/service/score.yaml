@@ -1,0 +1,16 @@
+# This Score file defines a workload declaring a service
+apiVersion: score.dev/v1b1
+metadata:
+  name: my-workload
+containers:
+  my-container:
+    image: .
+service:
+  ports:
+    www:
+      port: 8080
+      targetPort: 3001
+    stream:
+      port: 19245
+      targetPort: 19245
+      protocol: UDP
