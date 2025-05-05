@@ -3,7 +3,9 @@ metadata:
   name: my-workload
 containers:
   my-container:
-    image: .
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo Hello probes; sleep 5; done"]
     livenessProbe:
       httpGet:
         path: "/alive"

@@ -3,6 +3,6 @@ metadata:
   name: my-workload
 containers:
   demo:
-    image: .
+    image: busybox
     command: ["/bin/sh"]
-    args: ["-c", "while true; do printenv && sleep 60; done"]
+    args: ["-c", "while true; do echo Hello command; sleep 5; done"]

@@ -3,7 +3,9 @@ metadata:
   name: my-workload
 containers:
   my-container:
-    image: .
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo $REDIS_HOST; sleep 5; done"]
     variables:
       REDIS_HOST: ${resources.my-redis.host}
       REDIS_PORT: ${resources.my-redis.port}

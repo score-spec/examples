@@ -3,7 +3,9 @@ metadata:
   name: my-workload
 containers:
   my-container:
-    image: .
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo $POSTGRES_HOST; sleep 5; done"]
     variables:
       POSTGRES_HOST: ${resources.my-postgres.host}
       POSTGRES_PORT: ${resources.my-postgres.port}

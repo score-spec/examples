@@ -4,7 +4,9 @@ metadata:
   name: my-workload
 containers:
   my-container:
-    image: .
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo Hello service; sleep 5; done"]
 service:
   ports:
     www:

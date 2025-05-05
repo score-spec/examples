@@ -12,9 +12,9 @@ do
     echo "#### For ${feature}:"
     cd $feature
     score-compose init --no-sample
-    score-compose generate score.yaml --image busybox
+    score-compose generate score.yaml
     score-k8s init --no-sample
-    score-k8s generate score.yaml --image busybox
+    score-k8s generate score.yaml
     cd ..
   done
   cd ..
