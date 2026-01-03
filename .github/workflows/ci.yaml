@@ -25,3 +25,6 @@ jobs:
       - name: test-provisioners
         run: |
           .scripts/test-score-files.sh
+      - name: setup-kind-cluster
+        run: |
+          .scripts/setup-kind-cluster.sh
