@@ -11,7 +11,7 @@ do
   do
     echo "#### For ${feature}:"
     cd $feature
-    if [[ "$category" = "samples" ]]; then
+    if [[ "$category" = "samples/" ]]; then
       make compose-test
     else
       score-compose init --no-sample
