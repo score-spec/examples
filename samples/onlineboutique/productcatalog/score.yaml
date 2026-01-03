@@ -1,0 +1,23 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: productcatalog
+  annotations:
+    tags: "golang,backend,grpc"
+containers:
+  productcatalog:
+    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/productcatalogservice:v0.10.4
+    variables:
+      DISABLE_PROFILER: "1"
+      PORT: "3550"
+    resources:
+      limits:
+        memory: "40Mi"
+        cpu: "30m"
+      requests:
+        memory: "20Mi"
+        cpu: "10m"
+service:
+  ports:
+    grpc:
+      port: 3550
+      targetPort: 3550
