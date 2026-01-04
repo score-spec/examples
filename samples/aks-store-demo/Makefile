@@ -14,12 +14,14 @@ help:
 .score-compose/state.yaml:
 	score-compose init \
 		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/llm-model/score-compose/10-dmr-llm-model.provisioners.yaml
 
-compose.yaml: order/score.yaml product/score.yaml store-front/score.yaml store-admin/score.yaml makeline/score.yaml .score-compose/state.yaml Makefile
+compose.yaml: order/score.yaml product/score-ai.yaml store-front/score.yaml store-admin/score.yaml makeline/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \
 		order/score.yaml \
-		product/score.yaml \
+		ai/score.yaml \
+		product/score-ai.yaml \
 		store-front/score.yaml \
 		store-admin/score.yaml \
 		makeline/score.yaml
@@ -34,6 +36,7 @@ compose-up: compose.yaml
 .PHONY: compose-test
 compose-test: compose-up
 	curl $$(score-compose resources get-outputs 'dns.default#store-front.dns' --format '{{ .host }}:8080')
+	curl $$(score-compose resources get-outputs 'dns.default#store-admin.dns' --format '{{ .host }}:8080')
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
@@ -65,6 +68,15 @@ k8s-up: manifests.yaml
 	kubectl apply \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
+	kubectl wait deployments/store-admin \
+		-n ${NAMESPACE} \
+		--for condition=Available \
+		--timeout=90s
+	kubectl wait pods \
+		-n ${NAMESPACE} \
+		-l app.kubernetes.io/name=store-admin \
+		--for condition=Ready \
+		--timeout=90s
 	kubectl wait deployments/store-front \
 		-n ${NAMESPACE} \
 		--for condition=Available \
@@ -81,6 +93,7 @@ k8s-up: manifests.yaml
 .PHONY: k8s-test
 k8s-test: k8s-up
 	curl $$(score-k8s resources get-outputs dns.default#store-front.dns --format '{{ .host }}')
+	curl $$(score-k8s resources get-outputs dns.default#store-admin.dns --format '{{ .host }}')
 
 ## Delete the deployment of the local container in Kubernetes.
 .PHONY: k8s-down
