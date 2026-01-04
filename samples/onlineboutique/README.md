@@ -1,27 +1,28 @@
-```bash
-score-compose init --no-sample \
-    --provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
+# OnlineBoutique
+
+```mermaid
+flowchart TD
+    dns[DNS] --> frontend(frontend)
+    subgraph Workloads
+        loadgenerator(loadgenerator)-->frontend
+        frontend-->recommendation(recommendation)
+        frontend-->ad(ad)
+        frontend-->shipping(shipping)
+        frontend-->currency(currency)
+        frontend-->checkout(checkout)
+        frontend-->cart(cart)
+        checkout-->cart
+        checkout-->payment(payment)
+        checkout-->email(email)
+        checkout-->currency
+        checkout-->productcatalog(productcatalog)
+        recommendation-->productcatalog
+        frontend-->productcatalog
+    end
+    cart-->redis[(Redis)]
 ```
 
-```bash
-score-compose generate \
-    ad/score.yaml \
-    cart/score.yaml \
-    currency/score.yaml \
-    email/score.yaml \
-    payment/score.yaml \
-    productcatalog/score.yaml \
-    recommendation/score.yaml \
-    shipping/score.yaml \
-    checkout/score.yaml \
-    frontend/score.yaml \
-    loadgenerator/score.yaml
-```
+Deploy the [GoogleCloudPlatform/microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo) with Score:
 
-```bash
-docker compose up --build -d --remove-orphans
-```
-
-```bash
-curl $$(score-compose resources get-outputs dns.default#frontend.dns --format '{{ .host }}:8080')
-```
+- [`score-compose`](./score-compose.md)
+- [`score-k8s`](./score-k8s.md)
