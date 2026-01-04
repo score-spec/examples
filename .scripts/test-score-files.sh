@@ -11,10 +11,15 @@ do
   do
     echo "#### For ${feature}:"
     cd $feature
-    score-compose init --no-sample
-    score-compose generate score.yaml
-    score-k8s init --no-sample
-    score-k8s generate score.yaml
+    if [[ "$category" = "samples/" ]]; then
+      make compose-test
+      make k8s-test
+    else
+      score-compose init --no-sample
+      score-compose generate score.yaml
+      score-k8s init --no-sample
+      score-k8s generate score.yaml
+    fi
     cd ..
   done
   cd ..
