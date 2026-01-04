@@ -23,5 +23,5 @@ docker compose up --build -d --remove-orphans
 ```
 
 ```bash
-curl $$(score-compose resources get-outputs dns.default#frontend.dns --format '{{ .host }}:8080')
+curl $(score-compose resources get-outputs dns.default#frontend.dns --format '{{ .host }}:8080')
 ```
