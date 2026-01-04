@@ -13,7 +13,9 @@ do
     cd $feature
     if [[ "$category" = "samples/" ]]; then
       make compose-test
+      make compose-down
       make k8s-test
+      make k8s-down
     else
       score-compose init --no-sample
       score-compose generate score.yaml
