@@ -1,6 +1,6 @@
 # AKS Store demo
 
-![](https://github.com/Azure-Samples/aks-store-demo/raw/main/assets/demo-arch.png)
+![](https://github.com/Azure-Samples/aks-store-demo/raw/main/assets/demo-arch-with-openai.png)
 
 Deploy the [Azure-Samples/aks-store-demo](https://github.com/Azure-Samples/aks-store-demo) with Score:
 
