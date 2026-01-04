@@ -75,6 +75,7 @@ k8s-up: manifests.yaml
 		--for condition=Ready \
 		--timeout=90s
 	sleep 5
+	kubectl get pods -n ${NAMESPACE}
 
 ## Expose the container deployed in Kubernetes via port-forward.
 .PHONY: k8s-test

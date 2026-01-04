@@ -99,6 +99,8 @@ k8s-up: manifests.yaml
 		-l app.kubernetes.io/name=frontend \
 		--for condition=Ready \
 		--timeout=90s
+	sleep 5
+	kubectl get pods -n ${NAMESPACE}
 
 ## Test the expose frontend app
 .PHONY: k8s-test
