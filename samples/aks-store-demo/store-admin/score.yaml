@@ -35,7 +35,7 @@ resources:
       host: ${resources.dns.host}
       path: /
       port: 8081
-  makeline-service:
+  makeline:
     type: service
-  product-service:
+  product:
     type: service

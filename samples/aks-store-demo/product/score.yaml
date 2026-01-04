@@ -1,10 +1,10 @@
 apiVersion: score.dev/v1b1
 metadata:
-  name: product-service
+  name: product
   annotations:
     tags: "rust,backend"
 containers:
-  product-service:
+  product:
     image: ghcr.io/azure-samples/aks-store-demo/product-service:2.1.0
     livenessProbe:
       httpGet:

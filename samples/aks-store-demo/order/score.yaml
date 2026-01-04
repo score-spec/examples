@@ -1,10 +1,10 @@
 apiVersion: score.dev/v1b1
 metadata:
-  name: order-service
+  name: order
   annotations:
     tags: "javascript,backend"
 containers:
-  order-service:
+  order:
     image: ghcr.io/azure-samples/aks-store-demo/order-service:2.1.0
     variables:
       ORDER_QUEUE_HOSTNAME: "${resources.orders-queue.host}"

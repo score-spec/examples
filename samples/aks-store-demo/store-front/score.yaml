@@ -35,7 +35,7 @@ resources:
       host: ${resources.dns.host}
       path: /
       port: 8080
-  order-service:
+  order:
     type: service
-  product-service:
+  product:
     type: service

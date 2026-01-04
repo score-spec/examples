@@ -1,10 +1,10 @@
 apiVersion: score.dev/v1b1
 metadata:
-  name: makeline-service
+  name: makeline
   annotations:
     tags: "golang,backend"
 containers:
-  makeline-service:
+  makeline:
     image: ghcr.io/azure-samples/aks-store-demo/makeline-service:2.1.0
     variables:
       ORDER_QUEUE_URI: "amqp://${resources.orders-queue.host}:${resources.orders-queue.port}"
