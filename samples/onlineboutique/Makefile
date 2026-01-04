@@ -111,3 +111,4 @@ k8s-down:
 	kubectl delete \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
+	sleep 5
