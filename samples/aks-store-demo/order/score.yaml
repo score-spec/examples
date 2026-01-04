@@ -1,0 +1,39 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: order-service
+  annotations:
+    tags: "javascript,backend"
+containers:
+  order-service:
+    image: ghcr.io/azure-samples/aks-store-demo/order-service:2.1.0
+    variables:
+      ORDER_QUEUE_HOSTNAME: "${resources.orders-queue.host}"
+      ORDER_QUEUE_PORT: "${resources.orders-queue.port}"
+      ORDER_QUEUE_USERNAME: "${resources.orders-queue.username}"
+      ORDER_QUEUE_PASSWORD: "${resources.orders-queue.password}"
+      ORDER_QUEUE_NAME: "orders"
+      FASTIFY_ADDRESS: "0.0.0.0"
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 3000
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 3000
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "75m"
+      requests:
+        memory: "50Mi"
+        cpu: "1m"
+service:
+  ports:
+    http:
+      port: 3000
+      targetPort: 3000
+resources:
+  orders-queue:
+    type: amqp
+    id: orders-queue
