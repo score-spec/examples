@@ -1,0 +1,36 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: ai-service
+  annotations:
+    tags: "python,backend,ai,llm-model"
+containers:
+  ai-service:
+    image: ghcr.io/azure-samples/aks-store-demo/ai-service:2.1.0
+    variables:
+      USE_LOCAL_LLM: "true"
+      LOCAL_LLM_ENDPOINT: "${resources.llm-model.url}"
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 5001
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 5001
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "50m"
+      requests:
+        memory: "50Mi"
+        cpu: "20m"
+service:
+  ports:
+    http:
+      port: 5001
+      targetPort: 5001
+resources:
+  llm-model:
+    type: llm-model
+    params:
+      model: ai/smollm2:135M-Q2_K #ai/gpt-oss:latest

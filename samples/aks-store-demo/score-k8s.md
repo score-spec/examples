@@ -18,4 +18,5 @@ kubectl apply -f manifests.yaml
 
 ```bash
 curl $(score-k8s resources get-outputs dns.default#store-front.dns --format '{{ .host }}:80')
+curl $(score-k8s resources get-outputs dns.default#store-admin.dns --format '{{ .host }}:80')
 ```
