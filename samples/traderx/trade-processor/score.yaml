@@ -1,0 +1,21 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: trade-processor
+  annotations:
+    tags: "java,spring"
+containers:
+  trade-processor:
+    image: ghcr.io/finos/traderx/trade-processor:latest
+    variables:
+      DATABASE_TCP_HOST: "${resources.database.name}"
+      TRADE_FEED_HOST: "${resources.trade-feed.name}"
+service:
+  ports:
+    web:
+      port: 18091
+      targetPort: 18091
+resources:
+  trade-feed:
+    type: service
+  database:
+    type: service

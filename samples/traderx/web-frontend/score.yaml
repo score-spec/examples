@@ -1,0 +1,20 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: web-frontend
+  annotations:
+    tags: "html,website,ui,css,javascript,angular,react"
+containers:
+  web-frontend:
+    image: ghcr.io/finos/traderx/web-front-end-angular:latest
+    variables:
+      DATABASE_TCP_HOST: "${resources.database.name}"
+service:
+  ports:
+    web:
+      port: 18093
+      targetPort: 18093
+resources:
+  trade-feed:
+    type: service
+  database:
+    type: service

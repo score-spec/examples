@@ -1,0 +1,21 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: account-service
+  annotations:
+    tags: "java,spring"
+containers:
+  account-service:
+    image: ghcr.io/finos/traderx/account-service:latest
+    variables:
+      DATABASE_TCP_HOST: "${resources.database.name}"
+      PEOPLE_SERVICE_HOST: "${resources.people-service.name}"
+service:
+  ports:
+    web:
+      port: 18088
+      targetPort: 18088
+resources:
+  people-service:
+    type: service
+  database:
+    type: service

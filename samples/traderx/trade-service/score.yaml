@@ -1,0 +1,30 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: trade-service
+  annotations:
+    tags: "java,spring"
+containers:
+  trade-service:
+    image: ghcr.io/finos/traderx/trade-service:latest
+    variables:
+      DATABASE_TCP_HOST: "${resources.database.name}"
+      PEOPLE_SERVICE_HOST: "${resources.people-service.name}"
+      ACCOUNT_SERVICE_HOST: "${resources.account-service.name}"
+      REFERENCE_DATA_HOST: "${resources.reference-data.name}"
+      TRADE_FEED_HOST: "${resources.trade-feed.name}"
+service:
+  ports:
+    web:
+      port: 18092
+      targetPort: 18092
+resources:
+  people-service:
+    type: service
+  trade-feed:
+    type: service
+  account-service:
+    type: service
+  reference-data:
+    type: service
+  database:
+    type: service
