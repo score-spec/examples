@@ -80,7 +80,7 @@ kind-load-image:
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
 .PHONY: k8s-up
-k8s-up: manifests.yaml
+k8s-up: manifests.yaml kind-load-image
 	kubectl apply \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
