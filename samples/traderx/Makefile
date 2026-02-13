@@ -52,19 +52,19 @@ compose-down:
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml
 
-manifests.yaml: apps/account-service/score.yaml apps/database/score.yaml apps/ingress/score.yaml apps/people-service/score.yaml apps/position-service/score.yaml apps/reference-data/score.yaml apps/trade-feed/score.yaml apps/trade-processor/score.yaml apps/trade-service/score.yaml apps/web-frontend/score.yaml .score-k8s/state.yaml Makefile
+manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate \
-		apps/account-service/score.yaml \
-		apps/database/score.yaml \
-		apps/people-service/score.yaml \
-		apps/position-service/score.yaml \
-		apps/reference-data/score.yaml \
-		apps/trade-feed/score.yaml \
-		apps/trade-processor/score.yaml \
-		apps/trade-service/score.yaml \
-		apps/web-frontend/score.yaml
+		account-service/score.yaml \
+		database/score.yaml \
+		people-service/score.yaml \
+		position-service/score.yaml \
+		reference-data/score.yaml \
+		trade-feed/score.yaml \
+		trade-processor/score.yaml \
+		trade-service/score.yaml \
+		web-frontend/score.yaml
 	score-k8s generate \
-		apps/ingress/score.yaml \
+		ingress/score.yaml \
 		--image ingress:local
 
 ## Create a local Kind cluster.
@@ -115,20 +115,20 @@ generate-catalog-info:
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-k8s/backstage-catalog-entities.tpl
 	score-k8s generate \
 		--namespace traderx-demo \
-		apps/account-service/score.yaml \
-		apps/database/score.yaml \
-		apps/people-service/score.yaml \
-		apps/position-service/score.yaml \
-		apps/reference-data/score.yaml \
-		apps/trade-feed/score.yaml \
-		apps/trade-processor/score.yaml \
-		apps/trade-service/score.yaml \
-		apps/web-frontend/score.yaml
+		account-service/score.yaml \
+		database/score.yaml \
+		people-service/score.yaml \
+		position-service/score.yaml \
+		reference-data/score.yaml \
+		trade-feed/score.yaml \
+		trade-processor/score.yaml \
+		trade-service/score.yaml \
+		web-frontend/score.yaml
 		--output catalog-info.yaml
 	score-k8s generate \
 		--namespace traderx-demo \
 		--generate-namespace \
-		apps/ingress/score.yaml \
+		ingress/score.yaml \
 		--image ingress:local \
 		--output catalog-info.yaml
 	sed 's,$$GITHUB_REPO,score-spec/examples,g' -i catalog-info.yaml
