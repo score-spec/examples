@@ -5,3 +5,4 @@
 - [Samples](./samples/)
   - [OnlineBoutique](./samples/onlineboutique/)
   - [AKS Store Demo](./samples/aks-store-demo/)
+  - [TraderX](./samples/traderx/)
