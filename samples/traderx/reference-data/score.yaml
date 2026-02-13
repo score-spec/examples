@@ -1,0 +1,13 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: reference-data
+  annotations:
+    tags: "nodejs,nestjs"
+containers:
+  reference-data:
+    image: ghcr.io/finos/traderx/reference-data:latest
+service:
+  ports:
+    web:
+      port: 18085
+      targetPort: 18085

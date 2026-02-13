@@ -1,0 +1,18 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: position-service
+  annotations:
+    tags: "java,spring"
+containers:
+  position-service:
+    image: ghcr.io/finos/traderx/position-service:latest
+    variables:
+      DATABASE_TCP_HOST: "${resources.database.name}"
+service:
+  ports:
+    web:
+      port: 18090
+      targetPort: 18090
+resources:
+  database:
+    type: service
