@@ -1,0 +1,13 @@
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIMetadata
+metadata:
+  name: FINOS TraderX People Service
+  version: v1
+operations:
+  GET /People/GetPerson:
+    dispatcher: JS
+    dispatcherRules: |-
+      if (mockRequest.getRequest().parameters.LoginId) {
+        return mockRequest.getRequest().parameters.LoginId[0];
+      }
+      return "789";

@@ -19,12 +19,24 @@ service:
       targetPort: 18092
 resources:
   people-service:
-    type: service
+    type: endpoint
+    params:
+      port: 8181
+      openapi_file: ../api-mocks/people-service-openapi.json
+      openapi_title: FINOS TraderX People Service
   trade-feed:
     type: service
   account-service:
-    type: service
+    type: endpoint
+    params:
+      port: 8181
+      openapi_file: ../api-mocks/account-service-openapi.json
+      openapi_title: FINOS TraderX Account Service
   reference-data:
-    type: service
+    type: endpoint
+    params:
+      port: 8181
+      openapi_file: ../api-mocks/reference-data-openapi.json
+      openapi_title: FINOS TraderX Reference Data
   database:
     type: service
