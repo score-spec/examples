@@ -5,7 +5,7 @@ metadata:
     tags: "golang,backend,grpc"
 containers:
   shipping:
-    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/shippingservice:v0.10.4
+    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/shippingservice:v0.10.5
     variables:
       DISABLE_PROFILER: "1"
       PORT: "50051"
