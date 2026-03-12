@@ -1,0 +1,88 @@
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIExamples
+metadata:
+  name: FINOS TraderX Account Service
+  version: 0.1.0
+operations:
+  'GET /account/':
+    allAccounts:
+      request:
+        queryParams:
+          page: 1
+          size: 10
+      response:
+        mediaType: application/json
+        body:
+          - id: 10031
+            displayName: Internal Trading Book
+          - id: 11413
+            displayName: Private Clients Fund TTXX
+          - id : 42422
+            displayName: Algo Execution Partners
+          - id : 52335
+            displayName: Big Corporate Fund
+  'GET /account/{id}':
+    Internal Trading Book:
+      request:
+        parameters:
+          id: 10031
+      response:
+        mediaType: application/json
+        body:
+          id: 10031
+          displayName: "Internal Trading Book"
+    Private Clients Fund TTXX:
+      request:
+        parameters:
+          id: 11413
+      response:
+        mediaType: application/json
+        body:
+          id: 11413
+          displayName: "Private Clients Fund TTXX"
+    Algo Execution Partners:
+      request:
+        parameters:
+          id: 42422
+      response:
+        mediaType: application/json
+        body:
+          id: 42422
+          displayName: "Algo Execution Partners"
+    Big Corporate Fund:
+      request:
+        parameters:
+          id: 52335
+      response:
+        mediaType: application/json
+        body:
+          id: 52335
+          displayName: "Big Corporate Fund"
+  'GET /accountuser/':
+    allAccountUsers:
+      request:
+        queryParams:
+          page: 1
+          size: 10
+      response:
+        mediaType: application/json
+        body:
+          - accountId: 10031
+            username: user01
+          - accountId: 10031
+            username: user03
+          - accountId: 10031
+            username: user09
+          - accountId: 22214
+            username: user01
+          - accountId: 22214
+            username: user03
+          - accountId: 22214
+            username: user05
+          - accountId: 22214
+            username: user07
+          - accountId: 22214
+            username: user09
+          
+
+
