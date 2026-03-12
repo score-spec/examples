@@ -25,6 +25,7 @@ compose.yaml: order/score.yaml product/score-ai.yaml store-front/score.yaml stor
 		store-front/score.yaml \
 		store-admin/score.yaml \
 		makeline/score.yaml
+	cat compose.yaml
 
 ## Generate a compose.yaml file from the score specs and launch it.
 .PHONY: compose-up
