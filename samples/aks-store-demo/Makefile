@@ -17,7 +17,7 @@ help:
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
 		#--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/llm-model/score-compose/10-dmr-llm-model.provisioners.yaml
 
-compose.yaml: order/score.yaml product/score-ai.yaml store-front/score.yaml store-admin/score.yaml makeline/score.yaml .score-compose/state.yaml Makefile
+compose.yaml: order/score.yaml product/score.yaml store-front/score.yaml store-admin/score.yaml makeline/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \
 		order/score.yaml \
 		#ai/score.yaml \
