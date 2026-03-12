@@ -5,7 +5,7 @@ metadata:
     tags: "dotnet,backend,grpc"
 containers:
   cart:
-    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/cartservice:v0.10.4
+    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/cartservice:v0.10.5
     variables:
       REDIS_ADDR: "${resources.redis-cart.host}:${resources.redis-cart.port},user=${resources.redis-cart.username},password=${resources.redis-cart.password}"
     resources:
