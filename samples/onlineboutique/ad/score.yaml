@@ -5,7 +5,7 @@ metadata:
     tags: "java,backend,grpc"
 containers:
   ad:
-    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/adservice:v0.10.4
+    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/adservice:v0.10.5
     variables:
       PORT: "9555"
     resources:

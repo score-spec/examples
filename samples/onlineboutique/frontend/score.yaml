@@ -5,7 +5,7 @@ metadata:
     tags: "golang,html,css,ui,http,website"
 containers:
   frontend:
-    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/frontend:v0.10.4
+    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/frontend:v0.10.5
     livenessProbe:
       httpGet:
         path: /_healthz

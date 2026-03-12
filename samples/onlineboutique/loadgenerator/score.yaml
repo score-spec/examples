@@ -5,7 +5,7 @@ metadata:
     tags: "python"
 containers:
   loadgenerator:
-    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/loadgenerator:v0.10.4
+    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/loadgenerator:v0.10.5
     variables:
       FRONTEND_ADDR: "${resources.frontend.name}:80"
       USERS: "10"
