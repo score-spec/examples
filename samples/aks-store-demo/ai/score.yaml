@@ -33,4 +33,5 @@ resources:
   llm-model:
     type: llm-model
     params:
-      model: ai/smollm2:135M-Q2_K #ai/gpt-oss:latest
+      model: ai/smollm2:135M-Q4_0
+      #model: ai/gpt-oss:latest
