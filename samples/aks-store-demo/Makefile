@@ -15,18 +15,14 @@ help:
 	score-compose init \
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
-		#--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/llm-model/score-compose/10-dmr-llm-model.provisioners.yaml
 
 compose.yaml: order/score.yaml product/score.yaml store-front/score.yaml store-admin/score.yaml makeline/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \
 		order/score.yaml \
-		#ai/score.yaml \
-		product/score-ai.yaml \
 		product/score.yaml \
 		store-front/score.yaml \
 		store-admin/score.yaml \
 		makeline/score.yaml
-	cat compose.yaml
 
 ## Generate a compose.yaml file from the score specs and launch it.
 .PHONY: compose-up
