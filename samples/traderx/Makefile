@@ -69,7 +69,8 @@ compose-down:
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/endpoint/score-k8s/10-endpoint-with-microcks-cli.provisioners.yaml
 
 manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate \
