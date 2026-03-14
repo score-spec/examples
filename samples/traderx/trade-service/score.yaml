@@ -22,19 +22,22 @@ resources:
     type: endpoint
     params:
       port: 18090
-      openapi_file: api-mocks/people-service-openapi.json
-      openapi_title: FINOS TraderX People Service
+      artifacts: api-mocks/people-service-openapi.json:true,api-mocks/people-service-metadata.yaml:false,api-mocks/people-service-examples.yaml:false
+      name: FINOS TraderX People Service
+      version: v1
   trade-feed:
     type: service
   account-service:
     type: endpoint
     params:
       port: 18088
-      openapi_file: api-mocks/account-service-openapi.json
-      openapi_title: FINOS TraderX Account Service
+      artifacts: api-mocks/account-service-openapi.json:true,api-mocks/account-service-examples.yaml:false
+      name: FINOS TraderX Account Service
+      version: 0.1.0
   reference-data:
     type: endpoint
     params:
       port: 18085
-      openapi_file: api-mocks/reference-data-openapi.json
-      openapi_title: FINOS TraderX Reference Data
+      artifacts: api-mocks/reference-data-openapi.json:true,api-mocks/reference-data-examples.yaml:false
+      name: FINOS TraderX Reference Data
+      version: '1.0'
