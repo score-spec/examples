@@ -14,7 +14,9 @@ help:
 .score-compose/state.yaml:
 	score-compose init \
 		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/microcks.tpl \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml \
+		--provisioners ./score-provisioners/compose/10-endpoint-with-microcks.provisioners.yaml
 
 compose.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \
@@ -42,6 +44,23 @@ compose-test: compose-up
 	sleep 5
 	curl $$(score-compose resources get-outputs 'dns.default#ingress.dns' --format '{{ .host }}:8080')
 
+compose-mock.yaml: database/score.yaml ingress/score.yaml position-service/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
+	score-compose generate \
+		database/score.yaml \
+		position-service/score.yaml \
+		trade-feed/score.yaml \
+		trade-processor/score.yaml \
+		trade-service/score.yaml \
+		web-frontend/score.yaml
+	score-compose generate \
+		ingress/score.yaml \
+		--build 'ingress={"context":"ingress/","dockerfile":"Dockerfile.mock","tags":["ingress:local"]}'
+
+## Generate a compose.yaml file from the score specs and launch it.
+.PHONY: compose-up
+compose-mock-up: compose-mock.yaml
+	docker compose up --build -d --remove-orphans
+
 ## Delete the containers running via compose down.
 .PHONY: compose-down
 compose-down:
@@ -50,7 +69,8 @@ compose-down:
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml \
+		--provisioners ./score-provisioners/k8s/10-endpoint-with-microcks-cli.provisioners.yaml
 
 manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate \
