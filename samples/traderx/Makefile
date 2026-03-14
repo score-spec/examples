@@ -54,7 +54,7 @@ compose-mock.yaml: database/score.yaml ingress/score.yaml position-service/score
 		web-frontend/score.yaml
 	score-compose generate \
 		ingress/score.yaml \
-		--build 'ingress={"context":"ingress/","tags":["ingress:local"]}'
+		--build 'ingress={"context":"ingress/","dockerfile":"Dockerfile.mock","tags":["ingress:local"]}'
 
 ## Generate a compose.yaml file from the score specs and launch it.
 .PHONY: compose-up
