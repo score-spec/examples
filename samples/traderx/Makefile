@@ -16,7 +16,7 @@ help:
 		--no-sample \
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/microcks.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/endpoint/score-compose/10-endpoint-with-microcks.provisioners.yaml
+		--provisioners ./score-provisioners/compose/10-endpoint-with-microcks.provisioners.yaml
 
 compose.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \

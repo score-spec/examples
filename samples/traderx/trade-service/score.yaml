@@ -7,10 +7,10 @@ containers:
   trade-service:
     image: ghcr.io/finos/traderx/trade-service:latest
     variables:
-      DATABASE_TCP_HOST: "${resources.database.name}"
-      PEOPLE_SERVICE_HOST: "people-service" # "${resources.people-service.name}"
-      ACCOUNT_SERVICE_HOST: "account-service" # "${resources.account-service.name}"
-      REFERENCE_DATA_HOST: "reference-data" # "${resources.reference-data.name}"
+      TRADING_SERVICE_PORT: '18092'
+      PEOPLE_SERVICE_URL: "${resources.people-service.url}"
+      ACCOUNT_SERVICE_URL: "${resources.account-service.url}"
+      REFERENCE_DATA_SERVICE_URL: "${resources.reference-data.url}"
       TRADE_FEED_HOST: "${resources.trade-feed.name}"
 service:
   ports:
@@ -21,22 +21,20 @@ resources:
   people-service:
     type: endpoint
     params:
-      port: 8181
-      openapi_file: resources/people-service-openapi.json
+      port: 18090
+      openapi_file: api-mocks/people-service-openapi.json
       openapi_title: FINOS TraderX People Service
   trade-feed:
     type: service
   account-service:
     type: endpoint
     params:
-      port: 8181
-      openapi_file: resources/account-service-openapi.json
+      port: 18088
+      openapi_file: api-mocks/account-service-openapi.json
       openapi_title: FINOS TraderX Account Service
   reference-data:
     type: endpoint
     params:
-      port: 8181
-      openapi_file: resources/reference-data-openapi.json
+      port: 18085
+      openapi_file: api-mocks/reference-data-openapi.json
       openapi_title: FINOS TraderX Reference Data
-  database:
-    type: service
