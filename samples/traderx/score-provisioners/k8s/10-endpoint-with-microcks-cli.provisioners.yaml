@@ -1,9 +1,12 @@
+# Custom updates for now, will need to contribute back to the community provisioners repository later on.
 - uri: cmd://bash#endpoint-with-microcks-cli
   type: endpoint
   description: Outputs an endpoint URL for connecting to an other workload (a Microcks mock is generated if not found).
   supported_params:
     - port
-    - openapi_file
+    - artifacts
+    - name
+    - version
   expected_outputs:
     - url
   args:
@@ -11,7 +14,13 @@
   - |
     STDIN=$(cat)
     PARAM_PORT=$(echo $STDIN | yq eval -p json '.resource_params.port')
-    PARAM_OPENAPI_FILE=$(echo $STDIN | yq eval -p json '.resource_params.openapi_file')
+    PARAM_NAME=$(echo $STDIN | yq eval -p json '.resource_params.name')
+    PARAM_VERSION=$(echo $STDIN | yq eval -p json '.resource_params.version')
+    PARAM_ARTIFACTS=$(echo $STDIN | yq eval -p json '.resource_params.artifacts')
+    SPEC_FILE=""
+    if [ "$PARAM_ARTIFACTS" != "" ]; then
+      SPEC_FILE=$(echo $STDIN | yq eval -p json '.resource_params.artifacts | split(",") | .[0]')
+    fi
     WORKLOAD=$(echo $STDIN | yq eval -p json '.resource_id | split(".") | .[-1]')
     WORKLOAD_EXISTS=$(echo $STDIN | WORKLOAD=${WORKLOAD} yq eval -p json '.workload_services | has(strenv(WORKLOAD))')
     URL_HOSTNAME=${WORKLOAD}:${PARAM_PORT}
@@ -20,10 +29,9 @@
     if [ "$WORKLOAD_EXISTS" != "true" ]; then
       URL_HOSTNAME="microcks.127.0.0.1.nip.io"
       URL_SCHEME="https"
-      SPEC_FILE="${PARAM_OPENAPI_FILE}"
       URL_PATH=/rest/$(cat $SPEC_FILE | yq eval '.info.title' | yq '. |= sub(" ", "+")')
       set -eu -o pipefail
-      microcks import ${SPEC_FILE}:true --microcksURL=https://${URL_HOSTNAME} --insecure-tls --keycloakClientId=foo --keycloakClientSecret=bar >&2
+      microcks import ${PARAM_ARTIFACTS} --microcksURL=https://${URL_HOSTNAME} --insecure-tls --keycloakClientId=foo --keycloakClientSecret=bar >&2
     fi
     OUTPUTS='{"resource_outputs":{"url":"%s://%s%s"},"manifests":[]}'
     printf "$OUTPUTS" "$URL_SCHEME" "$URL_HOSTNAME" "$URL_PATH"
