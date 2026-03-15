@@ -14,7 +14,7 @@ help:
 .score-compose/state.yaml:
 	score-compose init \
 		--no-sample \
-		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/microcks.tpl \
+		--patch-templates ./score-patchers/compose/microcks.tpl \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml \
 		--provisioners ./score-provisioners/compose/10-endpoint-with-microcks.provisioners.yaml
 
