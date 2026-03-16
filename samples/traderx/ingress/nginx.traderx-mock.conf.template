@@ -6,7 +6,7 @@ server {
             proxy_pass http://database-database:18084/;
         }
         location /reference-data/ {
-            proxy_pass http://localhost:9090/rest/FINOS+TraderX+Reference+Data/1.0/;
+            proxy_pass http://microcks:8080/rest/FINOS+TraderX+Reference+Data/1.0/;
         }
 
         location /ng-cli-ws {
@@ -39,13 +39,13 @@ server {
         }
 
         location /people-service/ {
-            proxy_pass http://localhost:9090/rest/FINOS+TraderX+People+Service/v1/;
+            proxy_pass http://microcks:8080/rest/FINOS+TraderX+People+Service/v1/;
         }
         location /account-service/ {
-            proxy_pass http://localhost:9090/rest/FINOS+TraderX+Account+Service/0.1.0;
+            proxy_pass http://microcks:8080/rest/FINOS+TraderX+Account+Service/0.1.0/;
         }
         location /position-service/ {
-            proxy_pass http://position-service-position-service:18090/;
+            proxy_pass http://microcks:8080/rest/FINOS+TraderX+Position+Service/0.1.0/;
         }
         location /trade-service/ {
             proxy_pass http://trade-service-trade-service:18092/;
