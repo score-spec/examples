@@ -30,7 +30,7 @@
     {{ if or (not $w) (not $w.ServiceName) }}
     {{ .Init.hostname }}-mock:
       image: quay.io/microcks/microcks-cli:latest
-      restart: always
+      restart: on-failure
       entrypoint:
         - "microcks"
         - "import"
