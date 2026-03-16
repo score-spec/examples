@@ -44,10 +44,9 @@ compose-test: compose-up
 	sleep 5
 	curl $$(score-compose resources get-outputs 'dns.default#ingress.dns' --format '{{ .host }}:8080')
 
-compose-mock.yaml: database/score.yaml ingress/score.yaml position-service/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
+compose-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \
 		database/score.yaml \
-		position-service/score.yaml \
 		trade-feed/score.yaml \
 		trade-processor/score.yaml \
 		trade-service/score.yaml \
