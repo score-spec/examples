@@ -22,6 +22,15 @@ helm install ngf oci://ghcr.io/nginxinc/charts/nginx-gateway-fabric \
     --set service.type=NodePort \
     --set-json 'service.ports=[{"port":80,"nodePort":31000}]'
 
+kubectl wait deployments/ngf-nginx-gateway-fabric \
+    -n nginx-gateway \
+    --for condition=Available \
+    --timeout=90s
+kubectl wait --namespace nginx-gateway \
+    --for=condition=ready pod \
+    --selector=app.kubernetes.io/name=nginx-gateway-fabric \
+    --timeout=120s
+
 kubectl apply -f - <<EOF
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
