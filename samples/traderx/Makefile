@@ -15,8 +15,7 @@ help:
 	score-compose init \
 		--no-sample \
 		--patch-templates ./score-patchers/compose/microcks.tpl \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml \
-		--provisioners ./score-provisioners/compose/10-endpoint-with-microcks.provisioners.yaml
+		--provisioners ./score-provisioners/compose/10-service-with-microcks.provisioners.yaml
 
 compose.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \
@@ -53,7 +52,7 @@ compose-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml 
 		web-frontend/score.yaml
 	score-compose generate \
 		ingress/score.yaml \
-		--build 'ingress={"context":"ingress/","dockerfile":"Dockerfile.mock","tags":["ingress:local"]}'
+		--build 'ingress={"context":"ingress/","dockerfile":"Dockerfile.mock","tags":["ingress:mock"]}'
 
 ## Generate a compose.yaml file from the score specs and launch it.
 .PHONY: compose-mock-up
@@ -68,8 +67,7 @@ compose-down:
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml \
-		--provisioners ./score-provisioners/k8s/10-endpoint-with-microcks-cli.provisioners.yaml
+		--provisioners ./score-provisioners/k8s/10-service-with-microcks-cli.provisioners.yaml
 
 manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate \
@@ -90,11 +88,31 @@ manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yam
 .PHONY: kind-create-cluster
 kind-create-cluster:
 	../../.scripts/setup-kind-cluster.sh
+	helm repo add microcks https://microcks.io/helm
+	helm upgrade microcks microcks/microcks \
+		--install \
+		--namespace microcks \
+		--create-namespace \
+		--set microcks.url=microcks.127.0.0.1.nip.io \
+		--set keycloak.enabled=false
+	kubectl wait deployments/microcks \
+		-n microcks \
+		--for condition=Available \
+		--timeout=90s
+	kubectl wait --namespace microcks \
+		--for=condition=ready pod \
+		--selector=app=microcks \
+		--timeout=120s
 
 ## Load the local container image in the current Kind cluster.
 .PHONY: kind-load-image
 kind-load-image:
 	kind load docker-image ingress:local
+
+## Load the local mock container image in the current Kind cluster.
+.PHONY: kind-load-image-mock
+kind-load-image-mock:
+	kind load docker-image ingress:mock
 
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
