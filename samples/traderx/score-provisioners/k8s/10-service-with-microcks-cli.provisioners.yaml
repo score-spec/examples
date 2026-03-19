@@ -9,6 +9,7 @@
     - version
   expected_outputs:
     - url
+    - name
   args:
   - -c
   - |
@@ -33,5 +34,5 @@
       set -eu -o pipefail
       microcks import ${PARAM_ARTIFACTS} --microcksURL=https://${URL_HOSTNAME} --insecure-tls --keycloakClientId=foo --keycloakClientSecret=bar >&2
     fi
-    OUTPUTS='{"resource_outputs":{"url":"%s://%s%s"},"manifests":[]}'
-    printf "$OUTPUTS" "$URL_SCHEME" "$URL_HOSTNAME" "$URL_PATH"
+    OUTPUTS='{"resource_outputs":{"url":"%s://%s%s","name":"%s"},"manifests":[]}'
+    printf "$OUTPUTS" "$URL_SCHEME" "$URL_HOSTNAME" "$URL_PATH" "$WORKLOAD"

@@ -9,7 +9,7 @@ containers:
     variables:
       ACCOUNT_SERVICE_PORT: '18088'
       DATABASE_TCP_HOST: "${resources.database.name}"
-      PEOPLE_SERVICE_HOST: "${resources.people-service.name}"
+      PEOPLE_SERVICE_URL: "${resources.people-service.url}"
 service:
   ports:
     web:
@@ -18,5 +18,10 @@ service:
 resources:
   people-service:
     type: service
+    params:
+      port: 18089
+      artifacts: api-mocks/people-service-openapi.json:true,api-mocks/people-service-metadata.yaml:false,api-mocks/people-service-examples.yaml:false
+      name: FINOS TraderX People Service
+      version: v1
   database:
     type: service

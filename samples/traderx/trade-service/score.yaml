@@ -34,6 +34,8 @@ resources:
       version: 0.1.0
   trade-feed:
     type: service
+    params:
+      port: 18086
   account-service:
     type: service
     params:
