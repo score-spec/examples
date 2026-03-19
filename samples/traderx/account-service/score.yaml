@@ -7,6 +7,7 @@ containers:
   account-service:
     image: ghcr.io/finos/traderx/account-service:latest
     variables:
+      ACCOUNT_SERVICE_PORT: '18088'
       DATABASE_TCP_HOST: "${resources.database.name}"
       PEOPLE_SERVICE_HOST: "${resources.people-service.name}"
 service:
