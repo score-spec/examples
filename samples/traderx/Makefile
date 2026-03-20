@@ -51,7 +51,7 @@ compose-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml 
 		web-frontend/score.yaml
 	score-compose generate \
 		ingress/score.yaml \
-		--build 'ingress={"context":"ingress/","dockerfile":"Dockerfile.mock","tags":["ingress:mock"]}'
+		--build 'ingress={"context":"ingress/","dockerfile":"Dockerfile.compose-mock","tags":["ingress:compose-mock"]}'
 
 ## Generate a compose.yaml file from the score specs and launch it.
 .PHONY: compose-mock-up
@@ -92,7 +92,7 @@ manifests-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yam
 		web-frontend/score.yaml
 	score-k8s generate \
 		ingress/score.yaml \
-		--image ingress:mock
+		--image ingress:k8s-mock
 
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
@@ -107,7 +107,8 @@ kind-load-image:
 ## Load the local mock container image in the current Kind cluster.
 .PHONY: kind-load-image-mock
 kind-load-image-mock:
-	kind load docker-image ingress:mock
+	docker build -t ingress:k8s-mock -f ingress/Dockerfile.k8s-mock ingress/
+	kind load docker-image ingress:k8s-mock
 
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.

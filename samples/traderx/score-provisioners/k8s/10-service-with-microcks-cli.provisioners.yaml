@@ -24,11 +24,10 @@
     URL_SCHEME="http"
     URL_PATH=""
     if [ "$WORKLOAD_EXISTS" != "true" ]; then
-      URL_HOSTNAME="microcks.127.0.0.1.nip.io"
-      URL_SCHEME="https"
+      URL_HOSTNAME="microcks.microcks.svc.cluster.local:8080"
       URL_PATH=/rest/$(echo $PARAM_NAME | yq '. |= sub(" ", "+")')/$PARAM_VERSION
       set -eu -o pipefail
-      microcks import ${PARAM_ARTIFACTS} --microcksURL=https://${URL_HOSTNAME} --insecure-tls --keycloakClientId=foo --keycloakClientSecret=bar >&2
+      microcks import ${PARAM_ARTIFACTS} --microcksURL=https://microcks.127.0.0.1.nip.io --insecure-tls --keycloakClientId=foo --keycloakClientSecret=bar >&2
     fi
     OUTPUTS='{"resource_outputs":{"url":"%s://%s%s","name":"%s"},"manifests":[]}'
     printf "$OUTPUTS" "$URL_SCHEME" "$URL_HOSTNAME" "$URL_PATH" "$WORKLOAD"
