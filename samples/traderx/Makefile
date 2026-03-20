@@ -97,7 +97,7 @@ manifests-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yam
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
 kind-create-cluster:
-	../../.scripts/setup-kind-cluster.sh
+	./setup-kind-cluster.sh
 
 ## Load the local container image in the current Kind cluster.
 .PHONY: kind-load-image
