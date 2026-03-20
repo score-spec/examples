@@ -1,0 +1,29 @@
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIExamples
+metadata:
+  name: FINOS TraderX Trading Processor
+  version: 0.1.0
+operations:
+  'POST /tradeservice/order':
+    Big Buy Adobe:
+      request:
+        headers:
+          Content-Type: application/json
+        body:
+          accountId: 52335
+          security: ADBE
+          quantity: 100
+          side: Buy
+          state: New
+      response:
+        status: 200
+        mediaType: application/json
+        body:
+          trade:
+            id: 12345
+            accountId: 52335
+            security: ADBE
+            quantity: 100
+            side: Buy
+            state: Processing
+            createdAt: {{ now()}}
