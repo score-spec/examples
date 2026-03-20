@@ -18,10 +18,6 @@
     PARAM_NAME=$(echo $STDIN | yq eval -p json '.resource_params.name')
     PARAM_VERSION=$(echo $STDIN | yq eval -p json '.resource_params.version')
     PARAM_ARTIFACTS=$(echo $STDIN | yq eval -p json '.resource_params.artifacts')
-    SPEC_FILE=""
-    if [ "$PARAM_ARTIFACTS" != "" ]; then
-      SPEC_FILE=$(echo $STDIN | yq eval -p json '.resource_params.artifacts | split(",") | .[0]')
-    fi
     WORKLOAD=$(echo $STDIN | yq eval -p json '.resource_id | split(".") | .[-1]')
     WORKLOAD_EXISTS=$(echo $STDIN | WORKLOAD=${WORKLOAD} yq eval -p json '.workload_services | has(strenv(WORKLOAD))')
     URL_HOSTNAME=${WORKLOAD}:${PARAM_PORT}
@@ -30,7 +26,7 @@
     if [ "$WORKLOAD_EXISTS" != "true" ]; then
       URL_HOSTNAME="microcks.127.0.0.1.nip.io"
       URL_SCHEME="https"
-      URL_PATH=/rest/$(cat $SPEC_FILE | yq eval '.info.title' | yq '. |= sub(" ", "+")')
+      URL_PATH=/rest/$(echo $PARAM_NAME | yq '. |= sub(" ", "+")')/$PARAM_VERSION
       set -eu -o pipefail
       microcks import ${PARAM_ARTIFACTS} --microcksURL=https://${URL_HOSTNAME} --insecure-tls --keycloakClientId=foo --keycloakClientSecret=bar >&2
     fi

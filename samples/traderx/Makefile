@@ -92,7 +92,7 @@ manifests-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yam
 		web-frontend/score.yaml
 	score-k8s generate \
 		ingress/score.yaml \
-		--image ingress:local
+		--image ingress:mock
 
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
@@ -113,6 +113,20 @@ NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
 .PHONY: k8s-up
 k8s-up: manifests.yaml kind-load-image
+	kubectl apply \
+		-f manifests.yaml \
+		-n ${NAMESPACE}
+	kubectl wait deployments/ingress \
+		-n ${NAMESPACE} \
+		--for condition=Available \
+		--timeout=90s
+	kubectl wait pods \
+		-n ${NAMESPACE} \
+		-l app.kubernetes.io/name=ingress \
+		--for condition=Ready \
+		--timeout=90s
+
+k8s-mock-up: manifests-mock.yaml kind-load-image-mock
 	kubectl apply \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
