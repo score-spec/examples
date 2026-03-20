@@ -67,6 +67,7 @@ compose-down:
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/route/score-k8s/10-ingress-route.provisioners.yaml \
 		--provisioners ./score-provisioners/k8s/10-service-with-microcks-cli.provisioners.yaml
 
 manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
@@ -84,25 +85,20 @@ manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yam
 		ingress/score.yaml \
 		--image ingress:local
 
+manifests-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
+	score-k8s generate \
+		database/score.yaml \
+		trade-feed/score.yaml \
+		trade-service/score.yaml \
+		web-frontend/score.yaml
+	score-k8s generate \
+		ingress/score.yaml \
+		--image ingress:local
+
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
 kind-create-cluster:
 	../../.scripts/setup-kind-cluster.sh
-	helm repo add microcks https://microcks.io/helm
-	helm upgrade microcks microcks/microcks \
-		--install \
-		--namespace microcks \
-		--create-namespace \
-		--set microcks.url=microcks.127.0.0.1.nip.io \
-		--set keycloak.enabled=false
-	kubectl wait deployments/microcks \
-		-n microcks \
-		--for condition=Available \
-		--timeout=90s
-	kubectl wait --namespace microcks \
-		--for=condition=ready pod \
-		--selector=app=microcks \
-		--timeout=120s
 
 ## Load the local container image in the current Kind cluster.
 .PHONY: kind-load-image

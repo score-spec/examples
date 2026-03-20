@@ -26,6 +26,11 @@ resources:
     type: service
   trade-processor:
     type: service
+    params:
+      port: 18091
+      artifacts: api-mocks/trade-processor-openapi.json:true,api-mocks/trade-processor-examples.yaml:false
+      name: FINOS TraderX Trade Processor
+      version: 0.1.0
   web-frontend:
     type: service
   database:

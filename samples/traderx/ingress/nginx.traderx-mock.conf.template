@@ -51,7 +51,7 @@ server {
             proxy_pass http://trade-service-trade-service:18092/;
         }
         location /trade-processor/ {
-            proxy_pass http://trade-processor-trade-processor:18091/;
+            proxy_pass http://microcks:8080/rest/FINOS+TraderX+Trading+Processor/0.1.0/;
         }
         location / {
             proxy_pass http://web-frontend-web-frontend:18093/;
