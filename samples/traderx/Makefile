@@ -14,7 +14,7 @@ help:
 .score-compose/state.yaml:
 	score-compose init \
 		--no-sample \
-		--patch-templates ./score-patchers/compose/microcks.tpl \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/microcks.tpl \
 		--provisioners ./score-provisioners/compose/10-service-with-microcks.provisioners.yaml
 
 compose.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
