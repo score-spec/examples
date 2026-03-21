@@ -21,9 +21,9 @@
   outputs: |
     {{ $w := (index .WorkloadServices .Init.hostname) }}
     {{ if or (not $w) (not $w.ServiceName) }}
-    url: http://localhost:9090/rest/{{ .Params.name | replace " " "+" }}/{{ .Params.version }}
+    url: http://microcks:8080/rest/{{ .Params.name | replace " " "+" }}/{{ .Params.version }}/
     {{ else }}
-    url: http://{{ .Init.hostname }}:{{ .Params.port }}
+    url: http://{{ .Init.hostname }}:{{ .Params.port }}/
     {{ end }}
     name: {{ .Init.hostname }}
   expected_outputs:
