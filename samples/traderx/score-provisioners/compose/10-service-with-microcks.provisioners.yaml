@@ -1,0 +1,59 @@
+# Custom updates for now, will need to contribute back to the community provisioners repository later on.
+- uri: template://custom-provisioners/service-with-microcks
+  type: service
+  description: Outputs a service URL for connecting to an other workload (a Microcks mock is generated if not found).
+  init: |
+    hostname: {{ splitList "." .Id | last }}
+    {{ if .Params.artifacts }}
+    {{ $artifacts := .Params.artifacts | splitList "," }}
+    {{ $parsedPath := $artifacts | first | splitList "/" }}
+    {{ if eq (len $parsedPath) 0 }}
+    resourcesPath: "."
+    {{ else }}
+    resourcesPath: {{ trimSuffix (last $parsedPath) (first $artifacts) | trimSuffix "/" }}
+    {{ end }}
+    {{ end }}
+  supported_params:
+    - port
+    - artifacts
+    - name
+    - version
+  outputs: |
+    {{ $w := (index .WorkloadServices .Init.hostname) }}
+    {{ if or (not $w) (not $w.ServiceName) }}
+    url: http://microcks:8080/rest/{{ .Params.name | replace " " "+" }}/{{ .Params.version }}/
+    {{ else }}
+    url: http://{{ .Init.hostname }}:{{ .Params.port }}/
+    {{ end }}
+    name: {{ .Init.hostname }}
+  expected_outputs:
+    - url
+    - name
+  services: |
+    {{ $w := (index .WorkloadServices .Init.hostname) }}
+    {{ if or (not $w) (not $w.ServiceName) }}
+    {{ .Init.hostname }}-mock:
+      image: quay.io/microcks/microcks-cli:latest
+      restart: on-failure
+      entrypoint:
+        - "microcks"
+        - "import"
+        - "{{ .Params.artifacts }}"
+        - "--microcksURL=http://microcks:8080/api"
+        - "--insecure-tls"
+        - "--keycloakClientId=foo"
+        - "--keycloakClientSecret=bar"
+      cap_drop:
+        - ALL
+      read_only: true
+      user: "65532"
+      volumes:
+      - type: bind
+        source: {{ .Init.resourcesPath }}
+        target: /{{ .Init.resourcesPath }}
+        read_only: true
+      depends_on:
+        microcks:
+          condition: service_started
+          required: true
+    {{ end }}

@@ -26,4 +26,4 @@ operations:
             quantity: 100
             side: Buy
             state: Processing
-            createdAt: {{ now()}}
+            createdAt: '{{ now()}}'

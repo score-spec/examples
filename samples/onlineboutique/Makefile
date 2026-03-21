@@ -76,7 +76,7 @@ manifests.yaml: ad/score.yaml cart/score.yaml currency/score.yaml email/score.ya
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
 kind-create-cluster:
-	./scripts/setup-kind-cluster.sh
+	../../.scripts/setup-kind-cluster.sh
 
 ## Load the local container image in the current Kind cluster.
 .PHONY: kind-load-image
