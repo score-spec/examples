@@ -29,5 +29,5 @@
       set -eu -o pipefail
       microcks import ${PARAM_ARTIFACTS} --microcksURL=https://microcks.127.0.0.1.nip.io --insecure-tls --keycloakClientId=foo --keycloakClientSecret=bar >&2
     fi
-    OUTPUTS='{"resource_outputs":{"url":"%s://%s%s","name":"%s"},"manifests":[]}'
+    OUTPUTS='{"resource_outputs":{"url":"%s://%s%s/","name":"%s"},"manifests":[]}'
     printf "$OUTPUTS" "$URL_SCHEME" "$URL_HOSTNAME" "$URL_PATH" "$WORKLOAD"
