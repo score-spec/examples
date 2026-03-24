@@ -7,10 +7,10 @@ containers:
   trade-service:
     image: ghcr.io/finos/traderx/trade-service:latest
     variables:
-      DATABASE_TCP_HOST: "${resources.database.name}"
-      PEOPLE_SERVICE_HOST: "${resources.people-service.name}"
-      ACCOUNT_SERVICE_HOST: "${resources.account-service.name}"
-      REFERENCE_DATA_HOST: "${resources.reference-data.name}"
+      TRADING_SERVICE_PORT: '18092'
+      PEOPLE_SERVICE_URL: "${resources.people-service.url}"
+      ACCOUNT_SERVICE_URL: "${resources.account-service.url}"
+      REFERENCE_DATA_SERVICE_URL: "${resources.reference-data.url}"
       TRADE_FEED_HOST: "${resources.trade-feed.name}"
 service:
   ports:
@@ -19,24 +19,34 @@ service:
       targetPort: 18092
 resources:
   people-service:
-    type: endpoint
+    type: service
     params:
-      port: 8181
-      openapi_file: ../api-mocks/people-service-openapi.json
-      openapi_title: FINOS TraderX People Service
+      port: 18089
+      artifacts: api-mocks/people-service-openapi.json:true,api-mocks/people-service-metadata.yaml:false,api-mocks/people-service-examples.yaml:false
+      name: FINOS TraderX People Service
+      version: v1
+  position-service:
+    type: service
+    params:
+      port: 18090
+      artifacts: api-mocks/position-service-openapi.json:true,api-mocks/position-service-examples.yaml:false
+      name: FINOS TraderX Position Service
+      version: 0.1.0
   trade-feed:
     type: service
+    params:
+      port: 18086
   account-service:
-    type: endpoint
-    params:
-      port: 8181
-      openapi_file: ../api-mocks/account-service-openapi.json
-      openapi_title: FINOS TraderX Account Service
-  reference-data:
-    type: endpoint
-    params:
-      port: 8181
-      openapi_file: ../api-mocks/reference-data-openapi.json
-      openapi_title: FINOS TraderX Reference Data
-  database:
     type: service
+    params:
+      port: 18088
+      artifacts: api-mocks/account-service-openapi.json:true,api-mocks/account-service-examples.yaml:false
+      name: FINOS TraderX Account Service
+      version: 0.1.0
+  reference-data:
+    type: service
+    params:
+      port: 18085
+      artifacts: api-mocks/reference-data-openapi.json:true,api-mocks/reference-data-examples.yaml:false
+      name: FINOS TraderX Reference Data
+      version: '1.0'

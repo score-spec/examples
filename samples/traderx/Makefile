@@ -14,7 +14,8 @@ help:
 .score-compose/state.yaml:
 	score-compose init \
 		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service.provisioners.yaml
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/microcks.tpl \
+		--provisioners ./score-provisioners/compose/10-service-with-microcks.provisioners.yaml
 
 compose.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \
@@ -42,6 +43,21 @@ compose-test: compose-up
 	sleep 5
 	curl $$(score-compose resources get-outputs 'dns.default#ingress.dns' --format '{{ .host }}:8080')
 
+compose-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
+	score-compose generate \
+		database/score.yaml \
+		trade-feed/score.yaml \
+		trade-service/score.yaml \
+		web-frontend/score.yaml
+	score-compose generate \
+		ingress/score.yaml \
+		--build 'ingress={"context":"ingress/", "tags":["ingress:local"]}'
+
+## Generate a compose.yaml file from the score specs and launch it.
+.PHONY: compose-mock-up
+compose-mock-up: compose-mock.yaml
+	docker compose up --build -d --remove-orphans
+
 ## Delete the containers running via compose down.
 .PHONY: compose-down
 compose-down:
@@ -50,7 +66,8 @@ compose-down:
 .score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service.provisioners.yaml
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/route/score-k8s/10-ingress-route.provisioners.yaml \
+		--provisioners ./score-provisioners/k8s/10-service-with-microcks-cli.provisioners.yaml
 
 manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate \
@@ -62,6 +79,18 @@ manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yam
 		trade-feed/score.yaml \
 		trade-processor/score.yaml \
 		trade-service/score.yaml \
+		web-frontend/score.yaml \
+		-o manifests.yaml
+	score-k8s generate \
+		ingress/score.yaml \
+		--image ingress:local \
+		-o manifests.yaml
+
+manifests-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
+	score-k8s generate \
+		database/score.yaml \
+		trade-feed/score.yaml \
+		trade-service/score.yaml \
 		web-frontend/score.yaml
 	score-k8s generate \
 		ingress/score.yaml \
@@ -70,17 +99,32 @@ manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yam
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
 kind-create-cluster:
-	./scripts/setup-kind-cluster.sh
+	./setup-kind-cluster.sh
 
 ## Load the local container image in the current Kind cluster.
 .PHONY: kind-load-image
 kind-load-image:
+	docker build -t ingress:local ingress/
 	kind load docker-image ingress:local
 
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
 .PHONY: k8s-up
 k8s-up: manifests.yaml kind-load-image
+	kubectl apply \
+		-f manifests.yaml \
+		-n ${NAMESPACE}
+	kubectl wait deployments/ingress \
+		-n ${NAMESPACE} \
+		--for condition=Available \
+		--timeout=90s
+	kubectl wait pods \
+		-n ${NAMESPACE} \
+		-l app.kubernetes.io/name=ingress \
+		--for condition=Ready \
+		--timeout=90s
+
+k8s-mock-up: manifests-mock.yaml kind-load-image
 	kubectl apply \
 		-f manifests.yaml \
 		-n ${NAMESPACE}

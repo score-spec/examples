@@ -11,3 +11,5 @@ operations:
         return mockRequest.getRequest().parameters.LoginId[0];
       }
       return "789";
+  GET /People/GetMatchingPeople:
+    dispatcher: null

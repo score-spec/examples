@@ -57,7 +57,7 @@ manifests.yaml: makeline/score.yaml order/score.yaml product/score.yaml store-ad
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
 kind-create-cluster:
-	./scripts/setup-kind-cluster.sh
+	../../.scripts/setup-kind-cluster.sh
 
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
