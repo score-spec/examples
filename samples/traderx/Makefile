@@ -102,6 +102,7 @@ kind-create-cluster:
 ## Load the local container image in the current Kind cluster.
 .PHONY: kind-load-image
 kind-load-image:
+	docker build -t ingress:local ingress/
 	kind load docker-image ingress:local
 
 NAMESPACE ?= default
