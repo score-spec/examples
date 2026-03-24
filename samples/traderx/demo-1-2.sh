@@ -14,7 +14,7 @@ pe "code -g Makefile:72"
 pe "code manifests.yaml"
 pe "kubectl get all"
 pe "kubectl get pods"
-pe "score-k8s resources get-outputs dns.default#ingress.dns"
+pe "score-k8s resources get-outputs dns.default#ingress.dns --format 'http://{{ .host }}'"
 
 # Demo #2
 pe "echo \"Demo #2 - score-compose\""
@@ -24,5 +24,5 @@ pe "code -g Makefile:20"
 pe "make compose-up"
 pe "code compose.yaml"
 pe "docker ps"
-pe "http://localhost:8080"
+pe "echo http://localhost:8080"
 

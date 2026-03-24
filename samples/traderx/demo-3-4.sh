@@ -34,6 +34,6 @@ pe "make k8s-mock-up"
 pe "code manifests.yaml"
 pe "kubectl get all"
 pe "kubectl get pods"
-pe "score-k8s resources get-outputs dns.default#ingress.dns"
+pe "score-k8s resources get-outputs dns.default#ingress.dns --format 'http://{{ .host }}'"
 pe "echo https://microcks.127.0.0.1.nip.io/"
 
