@@ -27,7 +27,7 @@ kubectl wait --namespace ingress-nginx \
     --for=condition=ready pod \
     --selector=app.kubernetes.io/component=controller \
     --timeout=90s
-
+sleep 5
 helm repo add microcks https://microcks.io/helm
 helm upgrade microcks microcks/microcks \
     --install \
@@ -40,7 +40,7 @@ kubectl wait deployments/microcks \
 		-n microcks \
 		--for condition=Available \
 		--timeout=90s
-	kubectl wait --namespace microcks \
-		--for=condition=ready pod \
-		--selector=app=microcks \
-		--timeout=120s
+kubectl wait --namespace microcks \
+    --for=condition=ready pod \
+    --selector=app=microcks \
+    --timeout=120s

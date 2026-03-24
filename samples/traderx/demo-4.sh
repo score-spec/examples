@@ -7,22 +7,21 @@ fi
 . demo-magic.sh -d #-n
 clear
 
-# Demo #1
-pe "echo \"Demo #1 - score-k8s\""
+# Demo setup
+alias k=kubectl
+make k8s-down
+rm -rf .score-k8s
+clear
+
+# Demo #4
+clear
+pe "echo \"Demo #4 - score-k8s (Mocks)\""
 pe "code trade-service/score.yaml"
-pe "code -g Makefile:72"
+pe "code -g Makefile:88"
+pe "make k8s-mock-up"
 pe "code manifests.yaml"
 pe "kubectl get all"
 pe "kubectl get pods"
 pe "score-k8s resources get-outputs dns.default#ingress.dns --format 'http://{{ .host }}'"
-
-# Demo #2
-pe "echo \"Demo #2 - score-compose\""
-clear
-pe "code trade-service/score.yaml"
-pe "code -g Makefile:21"
-pe "make compose-up"
-pe "code compose.yaml"
-pe "docker ps"
-pe "echo http://localhost:8080"
+pe "echo https://microcks.127.0.0.1.nip.io/"
 

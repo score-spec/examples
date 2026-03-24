@@ -79,10 +79,12 @@ manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yam
 		trade-feed/score.yaml \
 		trade-processor/score.yaml \
 		trade-service/score.yaml \
-		web-frontend/score.yaml
+		web-frontend/score.yaml \
+		-o manifests.yaml
 	score-k8s generate \
 		ingress/score.yaml \
-		--image ingress:local
+		--image ingress:local \
+		-o manifests.yaml
 
 manifests-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate \
