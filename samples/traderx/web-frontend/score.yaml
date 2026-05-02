@@ -16,5 +16,7 @@ service:
 resources:
   trade-feed:
     type: service
+    params:
+      port: 18086
   database:
     type: service

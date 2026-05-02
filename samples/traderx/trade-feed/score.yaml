@@ -6,6 +6,8 @@ metadata:
 containers:
   trade-feed:
     image: ghcr.io/finos/traderx/trade-feed:latest
+    variables:
+      TRADE_FEED_PORT: '18086'
 service:
   ports:
     web:

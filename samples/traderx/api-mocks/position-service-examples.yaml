@@ -5,15 +5,15 @@ metadata:
   version: 0.1.0
 operations:
   GET /trades/{accountId}:
-    '52355':
+    '52335':
       request:
         parameters:
-          accountId: 52355
+          accountId: 52335
       response:
         mediaType: application/json
         body:
-          - id: TRADE-52355-AABBCC
-            accountId: 52355
+          - id: TRADE-52335-AABBCC
+            accountId: 52335
             security: BAC
             side: Sell
             state: Settled
@@ -21,14 +21,14 @@ operations:
             updated: 2026-03-11T08:57:54.758+00:00
             created: 2026-03-11T08:57:54.758+00:00
   GET /positions/{accountId}:
-    '52355':
+    '52335':
       request:
         parameters:
-          accountId: 52355
+          accountId: 52335
       response:
         mediaType: application/json
         body:
-          - accountId: 52355
+          - accountId: 52335
             security: BAC
             quantity: -2400
             updated: 2026-03-11T08:57:54.763+00:00  

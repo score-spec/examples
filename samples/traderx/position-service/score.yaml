@@ -7,6 +7,7 @@ containers:
   position-service:
     image: ghcr.io/finos/traderx/position-service:latest
     variables:
+      POSITION_SERVICE_PORT: '18090'
       DATABASE_TCP_HOST: "${resources.database.name}"
 service:
   ports:

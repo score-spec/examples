@@ -21,7 +21,6 @@ flowchart TD
         trade-processor-->trade-feed
         trade-processor-->database
         trade-service-->account-service
-        trade-service-->database
         trade-service-->people-service
         trade-service-->reference-data
         trade-service-->trade-feed
