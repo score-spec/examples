@@ -15,7 +15,7 @@ help:
 	score-compose init \
 		--no-sample \
 		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/microcks.tpl \
-		--provisioners ./score-provisioners/compose/10-service-with-microcks.provisioners.yaml
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-compose/10-service-with-microcks.provisioners.yaml
 
 compose.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-compose/state.yaml Makefile
 	score-compose generate \
@@ -27,10 +27,8 @@ compose.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml 
 		trade-feed/score.yaml \
 		trade-processor/score.yaml \
 		trade-service/score.yaml \
-		web-frontend/score.yaml
-	score-compose generate \
-		ingress/score.yaml \
-		--build 'ingress={"context":"ingress/","tags":["ingress:local"]}'
+		web-frontend/score.yaml \
+		ingress/score.yaml
 
 ## Generate a compose.yaml file from the score specs and launch it.
 .PHONY: compose-up
@@ -48,10 +46,8 @@ compose-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml 
 		database/score.yaml \
 		trade-feed/score.yaml \
 		trade-service/score.yaml \
-		web-frontend/score.yaml
-	score-compose generate \
-		ingress/score.yaml \
-		--build 'ingress={"context":"ingress/", "tags":["ingress:local"]}'
+		web-frontend/score.yaml \
+		ingress/score.yaml
 
 ## Generate a compose.yaml file from the score specs and launch it.
 .PHONY: compose-mock-up
@@ -67,7 +63,7 @@ compose-down:
 	score-k8s init \
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/route/score-k8s/10-ingress-route.provisioners.yaml \
-		--provisioners ./score-provisioners/k8s/10-service-with-microcks-cli.provisioners.yaml
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/service/score-k8s/10-service-with-microcks-cli.provisioners.yaml
 
 manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yaml people-service/score.yaml position-service/score.yaml reference-data/score.yaml trade-feed/score.yaml trade-processor/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate \
@@ -80,10 +76,7 @@ manifests.yaml: account-service/score.yaml database/score.yaml ingress/score.yam
 		trade-processor/score.yaml \
 		trade-service/score.yaml \
 		web-frontend/score.yaml \
-		-o manifests.yaml
-	score-k8s generate \
 		ingress/score.yaml \
-		--image ingress:local \
 		-o manifests.yaml
 
 manifests-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yaml trade-service/score.yaml web-frontend/score.yaml .score-k8s/state.yaml Makefile
@@ -91,26 +84,18 @@ manifests-mock.yaml: database/score.yaml ingress/score.yaml trade-feed/score.yam
 		database/score.yaml \
 		trade-feed/score.yaml \
 		trade-service/score.yaml \
-		web-frontend/score.yaml
-	score-k8s generate \
-		ingress/score.yaml \
-		--image ingress:local
+		web-frontend/score.yaml \
+		ingress/score.yaml
 
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
 kind-create-cluster:
 	./setup-kind-cluster.sh
 
-## Load the local container image in the current Kind cluster.
-.PHONY: kind-load-image
-kind-load-image:
-	docker build -t ingress:local ingress/
-	kind load docker-image ingress:local
-
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
 .PHONY: k8s-up
-k8s-up: manifests.yaml kind-load-image
+k8s-up: manifests.yaml
 	kubectl apply \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
@@ -124,7 +109,7 @@ k8s-up: manifests.yaml kind-load-image
 		--for condition=Ready \
 		--timeout=90s
 
-k8s-mock-up: manifests-mock.yaml kind-load-image
+k8s-mock-up: manifests-mock.yaml
 	kubectl apply \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
@@ -167,12 +152,7 @@ generate-catalog-info:
 		trade-feed/score.yaml \
 		trade-processor/score.yaml \
 		trade-service/score.yaml \
-		web-frontend/score.yaml
-		--output catalog-info.yaml
-	score-k8s generate \
-		--namespace traderx-demo \
-		--generate-namespace \
+		web-frontend/score.yaml \
 		ingress/score.yaml \
-		--image ingress:local \
 		--output catalog-info.yaml
 	sed 's,$$GITHUB_REPO,score-spec/examples,g' -i catalog-info.yaml

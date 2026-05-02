@@ -5,7 +5,7 @@ metadata:
     tags: "nginx,ingress"
 containers:
   ingress:
-    image: .
+    image: ghcr.io/finos/traderx/ingress:latest
     variables:
       DATABASE_URL: "${resources.database.url}"
       TRADE_PROCESSOR_URL: "${resources.trade-processor.url}"
